@@ -1,0 +1,116 @@
+For the mastermind.py game, which emulates the Mastermind board game, we must compare two codes. These codes are represented by Python as lists. E.g.:
+
+master_code = ['A', 'B', 'B', 'E']
+guess_code = ['B', 'A', 'C', 'E']
+
+Now, comparing these two codes as we would in the Mastermind board game, we would arrive at the result:
+
+Correct letter in correct position: 1
+Correct letter in wrong position: 2
+
+The reasoning for this is as follows:
+
+One letter in guess_code, i.e. 'E' at guess_code[3], matches exactly one element of master_code, i.e. 'E' at master_code[3].
+Thus there is one (1) letter that is the correct letter in the correct position. guess_code[3] == master_code[3].
+
+Two letters in guess_code, i.e. 'B' at guess_code[0] and 'A' at guess_code[1], match a letter in master_code, i.e. 'B' at
+master_code[1] and 'A' at master_code[0]; but they match only in value (i.e. 'A' == 'A') but not in position 
+(i.e. guess_code[0] != master_code[0] but rather guess_code[0] == master_code[1]).
+
+In the above example, then, we have:
+guess_code[0] == master_code[1]
+guess_code[1] == master_code[0]
+
+If we were to check guess_code against master_code in the following manner we would arrive at the result given above. 
+
+perfect = 0
+imperfect = 0
+n = 0
+while n <= 3:
+    if guess_code[n] == master_code[n]:
+        perfect += 1
+    else:
+	if guess_code[n] in master_code:
+	    imperfect += 1
+        else:
+	    pass
+    n += 1
+
+So, using the example codes given above, the algorithm is successful. A problem arises, however, when there are doubles/triples/quadruples in guess_code. E.g.:
+
+master_code = ['A', 'B', 'B', 'E']
+guess_code = ['B', 'A', 'A', 'E' ]
+
+According to the rules of the Mastermind board game, comparing guess_code to master_code should produce the result:
+
+Correct letter in correct position: 1
+Correct letter in wrong position: 2
+
+This is because while there are two A's in guess_code, there is only one A in master_code, so only one A in guess_code counts 
+towards a "correct letter wrong position" match. This combined with B at guess_code[0] --which is in a "correct letter wrong 
+position" match with master_code[1] or master_code[2]-- means there are 2 "correct letter wrong position" matches.
+
+In this case, however, the algorithm above does not produce a correct result. Instead, it would produce the result:
+
+Correct letter in correct position: 1
+Correct letter in wrong position: 3
+
+This is because the line in the algorithm "if guess_code[n] in master_code:" tests both guess_code[1] and guess_code[2] against
+the entirety of master_code, which contains exactly one instance of 'A'. This results in "guess_code[1] in master_code" 
+evaluating to "True" AND "guess_code[2] in master_code" evaluating to "True". Thus we discover that the problem with the above
+algorithm is that it checks each element in guess_code against the entirety of master_code. In order to fix this problem, we
+may "pop off" the corresponding or matched element of master_code when the test "if guess_code[n] in master_code" evaluates to 
+"True". Thus our algorithm becomes (excuse my non-pythonic addition):
+
+
+perfect = 0
+imperfect = 0
+n = 0
+while n <= 3:
+    if guess_code[n] == master_code[n]:
+        perfect += 1
+    else:
+	if guess_code[n] in master_code:
+	    imperfect += 1
+	    master_code.pop[x]
+        else:
+	    pass
+    n += 1
+
+Where 'x' is the numerical position-marker of the matched element in master_code.
+
+Using this algorithm, after guess_code[1] is found to be in a "correct letter wrong position" match with master_code[0], 
+master_code[0] would then be "popped off" and master_code would become ['B', 'B', 'E']. When guess_code[2] is tested against
+this new version of master_code no "correct letter wrong position" match would be found. 
+
+Again, however, we encounter a problem with the algorithm. For if one element of master_code is "popped off", then the integrity
+of the test for an exact match between guess_code and master_code (i.e. "if guess_code[n] == master_code[n]:") is compromised. 
+This is because after the element of master_code is deleted, the remaining elements of master_code obtain new numerical
+position-markers. Thus after the deletion of 'A' at master_code[0], the last element of master_code (i.e. 'E') obtains the 
+numerical position-marker master_code[2]. Thus there is no longer a master_code[3] against which to test guess_code[3] and so
+the algorithm will find no "correct letter correct position" match between guess_code and master_code, although there is indeed such a match.
+
+This problem is resolved by reassigning the matched element of master_code instead of using the "pop off" method.
+In this method, once "if guess_code[n] in master_code:" evaluates to "True", the matched element of master_code is reassigned 
+to an invalid letter, i.e. one which will produce no matches at all. Thus the algorithm becomes:
+
+ 
+perfect = 0
+imperfect = 0
+n = 0
+while n <= 3:
+    if guess_code[n] == master_code[n]:
+        perfect += 1
+    else:
+	if guess_code[n] in master_code:
+	    imperfect += 1
+	    master_code[x] = 'X'
+        else:
+	    pass
+    n += 1
+
+Where x is the numerical position-marker of the matched element in master_code. 
+Thus the matched element of master_code, insteadof being deleted, is replaced with the letter 'X', and master_code becomes 
+['X', 'B', 'B', 'E']. This new version of master_code produces the correct number of "correct letter wrong position" matches 
+without affecting the "correct letter correct position" matches. 'X' acts as a filler to keep the numerical position-markers of the remaining elements of the list the same, while preventing any unwanted "correct letter wrong position" match between 
+guess_code[2] and master_code. 
