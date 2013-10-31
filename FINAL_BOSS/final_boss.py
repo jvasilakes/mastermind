@@ -12,7 +12,6 @@ class Code():
 
     def get_secret_code(self, repository):
         secret_code = repository[1:5]
-	print secret_code
         return secret_code
 
     def get_guess_code(self):
@@ -46,10 +45,13 @@ class Code():
             n += 1
         
         for n in range(len(secret_code)):
-            if guess_code[n] in secret_code:
-                imperfect += 1
-            else:
-                pass
+	    for i in range(len(secret_code)):
+                if guess_code[n] == secret_code[i]:
+                    imperfect += 1
+		    secret_code[i] = 'X'
+                else:
+                    pass
+		i += 1
             n += 1
 
         print "Perfect: %d" % perfect
@@ -65,10 +67,14 @@ def main():
 	guess_code = code.get_guess_code()
 	perfect = code.test_code(secret_code, guess_code)	
 	if perfect == 4:
+	    secret_code = code.get_secret_code(repository)
+	    print "Secret code: %s" % secret_code
 	    print "You WIN!"
 	    exit(0)
 	else:
 	    pass
+    secret_code = code.get_secret_code(repository)
+    print secret_code
     print "YOU'RE A LOOOOOOOOOOSSSSEEERRRR!"
 
 if __name__ == '__main__':
