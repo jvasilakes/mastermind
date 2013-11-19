@@ -1,5 +1,6 @@
 import time
 import sys
+import text
 
 # ----------------- FUNCTIONS ----------------------------------------------- FUNCTIONS ---------------------------------------
 
@@ -44,7 +45,7 @@ class StartRoom(Room):
     def interact(self):
         global fairy_key_found, left_door_unlocked, first_fairy_room
          
-        print "\nThere is a door to your left and a door to your right."
+        text.test_text()
         
         while True:
             next = raw_input("""
@@ -130,7 +131,7 @@ class BlackRoom(Room):
 class FairyRoom(Room):
     def __init__(self):
         self.name = 'Fairy Room'
-	self.first_fairy_room = True
+		self.first_fairy_room = True
 
     def show_key(self):
         global your_name
