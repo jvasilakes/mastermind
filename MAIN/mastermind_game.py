@@ -1,34 +1,7 @@
 import time
 import sys
-
-# ----------------- FUNCTIONS ----------------------------------------------- FUNCTIONS ---------------------------------------
-
-def lose(reason):
-    print reason
-    print
-    print "Thanks for playing!"
-    play_again = raw_input("Try again? y/n ")
-    if play_again == "y":
-        main()
-    elif play_again == "n":
-        print "Goodbye!"
-        exit(0)
-    else:
-        print "I'll assume you don't want to play again. Goodbye!"
-        exit(0)
-
-def ellipsis():
-    time.sleep(0.5)
-    sys.stdout.write(".")
-    sys.stdout.flush()
-    time.sleep(0.5)
-    sys.stdout.write(".")
-    sys.stdout.flush()
-    time.sleep(0.5)
-    sys.stdout.write(".")
-    sys.stdout.flush()
-    time.sleep(0.5)
-    print
+import functions
+import bosses
 
 
 # ------------------------ ROOMS --------------------------------------------- ROOMS ------------------------------------------
@@ -70,7 +43,7 @@ class StartRoom(Room):
                  "look" in next and not fairy_key_found or \
                  "Look" in next and not fairy_key_found:
                 print "\nYou search the room."
-                ellipsis()
+                functions.ellipsis()
                 print "You find a small emerald key in a dark corner."
                 fairy_key_found = True
             elif "around" in next and fairy_key_found or \
@@ -101,14 +74,14 @@ class BlackRoom(Room):
                "Search" in next and not self.switch_pressed:
                 print
                 print "You start feeling around the room."
-                ellipsis()
+                functions.ellipsis()
                 print "You feel something like a switch."
 		while True:
                     ans_switch = raw_input("Flip the switch? y/n: ")
                     if ans_switch == "y":
                         print "You flip the switch."
                         self.switch_pressed = True
-			boss1 = Mastermind1()
+			boss1 = bosses.Mastermind1()
 			boss1.interact()
 			break
                     elif ans_switch == "n":
@@ -135,7 +108,7 @@ class FairyRoom(Room):
     def show_key(self):
         global your_name
         print "\nYou show her the key."
-        ellipsis()
+        functions.ellipsis()
         print """
         \"What luck we have today, all these fairies and I!
         That's it, that's the one! Now I shall tell you
@@ -249,7 +222,7 @@ class FairyRoom(Room):
             if "y" in next or "Y" in next:
 		return('fairy garden')
             elif "n" in next or "N" in next:
-                lose("You decided to not help the fairies. Shame on you!")
+                functions.lose("You decided to not help the fairies. Shame on you!")
             else:
                 print "You must enter either \'y\' or \'n\'."
     def first_fairy(self):
@@ -526,7 +499,7 @@ class FairyGarden(Room):
                 if "talk" in next or "Talk" in next or "fairy" in next or "Fairy" in next:
                     if not self.have_cake:
                         print "You approach the solemn fairy."
-                        ellipsis()
+                        functions.ellipsis()
                         print """
         \"Bah!\", the solemn fairy grumbles. \"I\'m
         having a terrible day! Talk to me tomorrow.\"
@@ -535,7 +508,7 @@ class FairyGarden(Room):
                 elif "open" in next or "Open" in next or "door" in next or "Door" in next:
                     self.sign_read = True
                     print "You open the large wooden door."
-                    ellipsis()
+                    functions.ellipsis()
                     print "There is a large, round fairy snoozing behind a large, square desk."
                     raw_input()
                     print """
@@ -550,7 +523,7 @@ class FairyGarden(Room):
                 elif "read" in next or "Read" in next or "sign" in next or "Sign" in next:
                     self.sign_read = True
                     print "You read the sign next to the door."
-                    ellipsis()
+                    functions.ellipsis()
                     print """
 
                 +------------------+
@@ -577,7 +550,7 @@ class FairyGarden(Room):
                 if "talk" in next or "Talk" in next or "fairy" in next or "Fairy" in next:
                     if not self.have_cake:
                         print "You approach the solemn fairy."
-                        ellipsis()
+                        functions.ellipsis()
                         print """
         \"Bah!\", the solemn fairy grumbles. \"I\'m
         having a terrible day! Talk to me tomorrow.\"
@@ -585,7 +558,7 @@ class FairyGarden(Room):
                         raw_input()
                     elif self.have_cake:
                         print "You approach the solemn fairy."
-                        ellipsis()
+                        functions.ellipsis()
                         print """
         \"Bah!\", the solemn fairy grumbles. \"I\'m
         having a terrible day!\"
@@ -600,7 +573,7 @@ class FairyGarden(Room):
                             if "y" in next or "Y" in next:
                                 print "You hand him a slice of cake."
                                 self.fairy_has_cake = True
-                                ellipsis()
+                                functions.ellipsis()
                                 print """
         \"Oh! Thank you! I shall eat it heartily!\"
                                       """
@@ -608,7 +581,7 @@ class FairyGarden(Room):
                                 print "The fairy hurries off with the cake leaving the archway open."
                                 next = raw_input("Go through the archway? y/n ")
                                 if "y" in next or "Y" in next:
-				    ellipsis()
+				    fucntions.ellipsis()
 				    return('sign room')
                                 elif "n" in next or "N" in next:
                                     break
@@ -630,7 +603,7 @@ class FairyGarden(Room):
                 elif "open" in next or "Open" in next or "door" in next or "Door" in next:
                     self.sign_read = True
                     print "You open the large wooden door."
-                    ellipsis()
+                    functions.ellipsis()
                     print "There is a large, round fairy snoozing behind a large, square desk."
                     raw_input()
                     print """
@@ -645,14 +618,14 @@ class FairyGarden(Room):
 
                 elif "knock" in next or "Knock" in next or "door" in next or "Door" in next:
                     print "You knock on the door."
-                    ellipsis()
+                    functions.ellipsis()
                     print """
         \"Guh! Uh... yes! Hello!\", the voice behind the door says.
         \"Please do come in!\"
                           """
                     raw_input()
                     print "You open the door."
-                    ellipsis()
+                    functions.ellipsis()
                     print "There is a large, round fairy sitting behind a large, square desk."
                     raw_input()
                     print """
@@ -676,7 +649,7 @@ class FairyGarden(Room):
                     print "You exit the mayor\'s office."
                     self.have_cake = True
                     self.met_mayor = True
-                    ellipsis()
+                    functions.ellipsis()
                     
                 else:
                     print "I don't know what you mean. Choose one of the available options."
@@ -693,7 +666,7 @@ class FairyGarden(Room):
                 if "talk" in next or "Talk" in next or "fairy" in next or "Fairy" in next:
                         if not self.have_cake:
                             print "You approach the solemn fairy."
-                            ellipsis()
+                            functions.ellipsis()
                             print """
         \"Bah!\", the solemn fairy grumbles. \"I\'m
         having a terrible day! Talk to me tomorrow.\"
@@ -701,7 +674,7 @@ class FairyGarden(Room):
                             raw_input()
                         elif self.have_cake:
                             print "You approach the solemn fairy."
-                            ellipsis()
+                            functions.ellipsis()
                             print """
         \"Bah!\", the solemn fairy grumbles. \"I\'m
         having a terrible day!\"
@@ -716,7 +689,7 @@ class FairyGarden(Room):
                                 if "y" in next or "Y" in next:
                                     print "You hand him a slice of cake."
                                     self.fairy_has_cake = True
-                                    ellipsis()
+                                    functions.ellipsis()
                                     print """
         \"Oh! Thank you! I shall eat it heartily!\"
                                           """
@@ -742,12 +715,12 @@ class FairyGarden(Room):
                             break
                 elif "open" in next or "Open" in next or "door" in next or "Door" in next:
                     print "You open the door."
-                    ellipsis()
+                    functions.ellipsis()
                     print "The mayor is snoozing comfortably at his desk."
                     raw_input()
                 elif "knock" in next or "Knock" in next or "door" in next or "Door" in next:
                     print "You knock on the door."
-                    ellipsis()
+                    functions.ellipsis()
                     print """
         \"Guh! Uh... yes! Hello!\", the voice behind the door says.
         \"I\'m, well, quite busy at the moment. Please come back later.\"
@@ -767,16 +740,16 @@ class FairyGarden(Room):
 
             if "go" in next or "Go" in next  or "archway" in next or "Archway" in next:
                 print "You go through the archway."
-                ellipsis()
+                functions.ellipsis()
                 return('sign room')
             elif "open" in next or "Open":
                 print "You open the door."
-                ellipsis()
+                functions.ellipsis()
                 print "The mayor is snoozing comfortably at his desk."
                 raw_input()
             elif "knock" in next or "Knock":
                 print "You knock on the door..."
-                ellipsis()
+                functions.ellipsis()
                 print """
         \"Guh! Uh... yes! Hello!\", the voice behind the door says.
         \"I\'m, well, quite busy at the moment. Please come back later.\"
@@ -796,103 +769,6 @@ class FairyGarden(Room):
             
 			
 # -------------------------------- BOSSES --------------------------------- BOSSES -------------------------------------------
-class Boss(object):
-    def __init__(self):
-	pass
-
-
-class Mastermind1(Boss):
-    def __init__(self):
-        pass
-        
-    def interact(self):
-        global left_door_unlocked
-        
-        print """
-        You hear the sudden click of a lock as the door through which you came
-        into this room is bolted shut. Torches ignite along the walls and you 
-        find yourself in a dank cell surrounded by dark, mishapen figures. As 
-        the torch light flickers you discern that these figures are in fact 
-        repulsive goblins, quietly snickering and whispering to each other in 
-        a hideous language. 
-        """
-        raw_input()
-       
-        print """
-        A figure emerges from within them, hooded, and with upright posture.
-        You cannot make out his face under his cloak.
-        """
-        
-        raw_input()
-        
-        print """
-    ##########    #############
-  ########             #########
-########                 #########        \"A lost soul enters our midst!\",
-######          ###       ########        he sneers, and the goblins' snickers
-#####         ######       #########      turn to laughs. 
-#####       #########       ##########     
-#####       ###########      #########    \"I am the first Mastermind. If
-#####       ##  ###  ##         ######    you are able to solve my puzzle
-#####       ###########           ####    I may be so gracious as to let you 
-######      ###########            ###    pass.
-######      ###########             ##
-######      ###########              #    If not, my goblins shall rip the
-######      ###########          #   #    flesh from your bones.\"
-######       ##########           #  #
-#####         ########               #
-#####          ######                     \"My puzzle is called the 
-####             ###                      3-Digit Number Code.\"
-###               ##
-##                 #
-##        ##       #
-##         #
-"""
-
-        raw_input()
-        
-        print """
-        Each digit is a number 1 through 9. The third digit is
-        15 less than the sum of the first two digits. The
-        first digit is one less than the second digit. What is
-        the 3-digit code? You have 3 guesses.
-        """
-
-        for x in xrange(3):
-            try:
-                ans_code = int(raw_input("Enter a 3-digit number: "))
-                if ans_code == 892:
-		    left_door_unlocked = True
-                    ellipsis()
-                    print "\n"
-                    print """
-        \"Bah! You figured out my secret code!
-        Goblins! Quickly, let us depart!\"
-                
-        The cloaked man and his horde of goblins are enveloped in a cloud 
-        of blue smoke. The goblins' snickers slowly fade away and as the 
-        smoke clears you find yourself alone in the room once again.
-        
-        You hear a loud click as the door is unlocked behind you.
-                """
-                    raw_input()
-                    break
-                elif ans_code != 892:
-                    if x == 2:
-                        print "\"You've run out of guesses! Now you shall die!\""
-                        print "The hideous goblins attack and rip the flesh from your bones."
-                        lose("The first Mastermind has defeated you!")
-                    else:
-                        print """
-        \"Ha! Perhaps my puzzle shall defeat you!
-        You have %d guesses left.\"
-        """ % (2 - x)
-            except ValueError:
-                print """
-        \"You must enter a number!
-        Perhaps my puzzle shall defeat you!
-        You have %d guesses left.\"
-        """ % (2 - x)
         
 # ------------------------------ GAME ENGINE ---------------------------------------------GAME ENGINE -------------------------               
 class Engine(object):
@@ -921,7 +797,7 @@ class Engine(object):
         raw_input("Press RETURN to begin.")
         print
         print "You awake in a dark room."
-        ellipsis()
+        functions.ellipsis()
         current_room = self.map_name.next_room(self.room_name)
         while True:
 	    next_room_name = current_room.interact()
@@ -935,7 +811,7 @@ class Map(object):
     'black room' : BlackRoom(),
     'fairy room' : FairyRoom(),
     'fairy garden' : FairyGarden(),
-    'boss1': Mastermind1() 
+    'boss1': bosses.Mastermind1() 
     }
 
     def __init__(self):
