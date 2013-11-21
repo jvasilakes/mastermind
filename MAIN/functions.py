@@ -1,6 +1,27 @@
 import time
 import sys
 
+
+class Inventory(object):
+    list = []
+
+    def __init__(self):
+	pass
+
+    def add_item(self, item):
+	Inventory.list.append(item)
+	print "%s added to inventory." % item
+
+    def in_list(self, item): 
+	if item in Inventory.list:
+	    return True
+
+    def drop_item(self, item):
+	Inventory.list.remove(item)
+
+inventory = Inventory()
+
+
 def lose(reason):
     print reason
     print

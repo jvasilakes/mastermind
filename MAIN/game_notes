@@ -1,0 +1,12 @@
+GAME NOTES and TO DO LIST
+
+11/20
+
+Began process of eliminating global variables.
+    Created inventory class in functions.py.
+    Change all "fairy_key_found"s to functions.inventory.in_list('fairy key') in mastermind_game.py
+    global var "left_door_unlocked" will become a class variable under StartRoom. Still a bool, it 
+	will depend upon having the talisman in inventory, which is obtained after defeating the 
+	first Mastermind. 
+
+   your_name var will remain global. It will be the ONLY global variable.

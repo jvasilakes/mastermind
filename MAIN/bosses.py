@@ -66,7 +66,7 @@ class Mastermind1(Boss):
             try:
                 ans_code = int(raw_input("Enter a 3-digit number: "))
                 if ans_code == 892:
-		    left_door_unlocked = True
+		    functions.inventory.add_item('talisman')
                     functions.ellipsis()
                     print "\n"
                     print """

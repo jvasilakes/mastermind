@@ -15,10 +15,10 @@ class StartRoom(Room):
         self.name = 'First Room'
 
     def interact(self):
-        global fairy_key_found, left_door_unlocked, first_fairy_room
+        global left_door_unlocked
          
         print "\nThere is a door to your left and a door to your right."
-        
+
         while True:
             next = raw_input("""
         What do you do?
@@ -39,16 +39,16 @@ class StartRoom(Room):
             elif "right" in next or "Right" in next:
                 print "\nYou open the right door."
 		return('black room')
-            elif "around" in next and not fairy_key_found or \
-                 "look" in next and not fairy_key_found or \
-                 "Look" in next and not fairy_key_found:
+            elif "around" in next and not functions.inventory.in_list('fairy key') or \
+                 "look" in next and not functions.inventory.in_list('fairy key') or \
+                 "Look" in next and not functions.inventory.in_list('fairy key'):
                 print "\nYou search the room."
                 functions.ellipsis()
                 print "You find a small emerald key in a dark corner."
-                fairy_key_found = True
-            elif "around" in next and fairy_key_found or \
-                 "look" in next and fairy_key_found or \
-                 "Look" in next and fairy_key_found:
+                functions.inventory.add_item('fairy key') 
+            elif "around" in next and functions.inventory.in_list('fairy key') or \
+                 "look" in next and functions.inventory.in_list('fairy key') or \
+                 "Look" in next and functions.inventory.in_list('fairy key'):
                 print "\nYou find nothing more in the room."
             else:
                 print "\nI don't know what you mean. Choose one of the available options."
@@ -56,7 +56,7 @@ class StartRoom(Room):
 class BlackRoom(Room):
     def __init__(self):
         self.name = 'Black Room'
-	self.switch_pressed = False
+	self.trap_sprung = False
         
     def interact(self):
         
@@ -70,32 +70,27 @@ class BlackRoom(Room):
         Return to the previous room.
         ? """)
 
-            if "search" in next and not self.switch_pressed or \
-               "Search" in next and not self.switch_pressed:
+            if "search" in next and not self.trap_sprung or \
+               "Search" in next and not self.trap_sprung:
                 print
                 print "You start feeling around the room."
                 functions.ellipsis()
-                print "You feel something like a switch."
-		while True:
-                    ans_switch = raw_input("Flip the switch? y/n: ")
-                    if ans_switch == "y":
-                        print "You flip the switch."
-                        self.switch_pressed = True
-			boss1 = bosses.Mastermind1()
-			boss1.interact()
-			break
-                    elif ans_switch == "n":
-                        print "You don't flip the switch."
-                    else:
-                        print "Type \"y\" or \"n\"."
-            elif "search" in next and self.switch_pressed or \
-                 "Search" in next and self.switch_pressed:
+                print "Your ankle gets caught on a rope on the ground."
+		print "You are caught in trap!"
+                self.trap_sprung = True
+		boss1 = bosses.Mastermind1()
+		boss1.interact()
+
+            elif "search" in next and self.trap_sprung or \
+                 "Search" in next and self.trap_sprung:
                 print
-                print "All you find is the switch you already flipped."
+                print "All you find is the rope you were caught in."
+
             elif "return" in next or \
                  "Return" in next or \
                  "previous" in next:
 		 return('start room')
+
             else:
                 print
                 print "I don't know what you mean. Choose one of the available options."
@@ -226,7 +221,7 @@ class FairyRoom(Room):
             else:
                 print "You must enter either \'y\' or \'n\'."
     def first_fairy(self):
-        global fairy_key_found, your_name
+        global your_name
         self.first_fairy_room = False
         print """
         A bright, clear light shines from within, and, your eyes being by
@@ -316,9 +311,9 @@ class FairyRoom(Room):
         key in the course of your travels?\" 
         y/n """)
                 
-                    if next2 == "y" and fairy_key_found:
+                    if next2 == "y" and functions.inventory.in_list('fairy key'):
                         return(self.show_key())
-                    elif next2 == "y" and not fairy_key_found:
+                    elif next2 == "y" and not :
                         print """
         \"Nay! O' traveller! It seems a key you hold not. 
         Just the clothes on your back and the scars
@@ -779,11 +774,11 @@ class Engine(object):
 
     def opening_scene(self):
         print """
-       __   __ _____ ____ ___       _____       __   
-|\  /|/  \ /  \  |  |    |   ||\  /|  |  |\   ||  \  
-| \/ ||__| |__   |  |___ |___|| \/ |  |  | \  ||   | 
-|    ||  |    |  |  |    | \  |    |  |  |  \ ||   | 
-|    ||  | \__/  |  |____|  \ |    |__|__|   \||__/  
+        __   __ _____ ____ ___       _____       __   
+ |\  /|/  \ /  \  |  |    |   ||\  /|  |  |\   ||  \  
+ | \/ ||__| |__   |  |___ |___|| \/ |  |  | \  ||   | 
+ |    ||  |    |  |  |    | \  |    |  |  |  \ ||   | 
+ |    ||  | \__/  |  |____|  \ |    |__|__|   \||__/  
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@@@@@@@@@_|__|_@@@@@@@@ || @@@@@@@@_|__|_@@@@@@@@@@@
 @@@@@@@@@@/      \@@@@@@ -  - @@@@@@/      \@@@@@@@@@@
@@ -821,12 +816,9 @@ class Map(object):
 	return Map.rooms.get(room_name)
 
 def reset_game():
-    global fairy_key_found, your_name, left_door_unlocked
-    fairy_key_found = False
-    switch_pressed = False
+    global your_name, left_door_unlocked
     left_door_unlocked = False
     your_name = ''
-    first_fairy_room = True
 
 def main():
     reset_game()
