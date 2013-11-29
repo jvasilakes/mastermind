@@ -1,9 +1,9 @@
+import re
+
 class SignRoom(object):
 
     def __init__(self):
 	pass
-
-#---------------INTERACT----------------------------------------------INTERACT----------------------------
 
     def interact(self):
 	print """
@@ -73,7 +73,7 @@ class SignRoom(object):
 	raw_input() # ellipsis
 	
 	print """       
-		        _/ /
+		        ./ /
 	__   _  ___     /  \ 
 	 -\_ \---------|/^\ |-
 	| ===\|===  ===  ==\| |
@@ -84,46 +84,102 @@ class SignRoom(object):
 	 -------|\ /| --------
                 \__ /
                """    
+	self.wheel_of_fortune()
 
-	def wheel_of_fortune(self):
-	    correct = 0
-	    while correct == 0:
-	        print """
+
+    def wheel_of_fortune(self):
+	insertions = [' ', ' ', ' ', ' ']
+	removals = ['O', 'E', 'N', 'P']
+	correct = 0
+	while correct < 4:
+	    print """
 	
          ___       __       _^_    __
           __  \ __/  \     / | | /    \  \__
 	++---\__  _/ \|----|  /---------\   _\     		   
       \ \+------\ \--------|/------------| | \|                     _/ /
        | |      //                      /  |        __   _  ___     /  \ 
-      / \ \  BEYOND RESIDE THE ELDERS, //| \         -\_ \---------|/^\ |-
+      / \ \  BEY%sND RESIDE THE ELDERS, //| \         -\_ \---------|/^\ |-
      |  ||\|                             |\ |       | ===\|===  ===  ==\| |
-        ||    KEEPERS OF THE VILLAGE.    | ||       | / \  / \  / \  / \  |
-        ||    \                          |//        ||   ||   ||   ||   | |
-        ||     |  ONLY THE WISE          ||         | \ /  \ /  \ /  \ /  |
+        ||    KEEPERS OF TH%s VILLAGE.    | ||       | / \  / \  / \  / \  |
+        ||    \                          |//        || %s || %s || %s || %s | |
+        ||     |  O%sLY THE WISE          ||         | \ /  \ /  \ /  \ /  |
         ||     /\__                _/    ||         | ===  ===  ===  ===  |
-        ||   /      MAY PASS.       \_ ___|          -------|\ /| --------
+        ||   /      MAY %sASS.       \_ ___|          -------|\ /| --------
        //_                           <   _\__               \__ /
      _/ _ \/>-----_/-----|\------------\__/
      _/ +\_/-------------| | /|----------++
                           \  / 
-		   """
+		   """ % (removals[0], removals[1], insertions[0], insertions[1], insertions[2], insertions[3], removals[2], removals[3])
 
-		letter = raw_input("Which letter will you choose from the stone plaque? ")
-		if re.search(r"[A-Z]" | "[a-z]", letter):
-		    if letter == 'o' or letter == 'O':
-			print "Correct!"
-		        correct += 1
-		    elif letter == 'p' or letter == 'P':
-			print "Correct!"
-		        correct += 1
-		    elif letter == 'e' or letter == 'E':
-			print "Correct!"
-		        correct += 1
-		    elif letter == 'n' or letter == 'N':
-			print "Correct!"
-		        correct += 1
+	    letter = raw_input("Which letter will you choose from the stone plaque? ")
+	    if re.search(r"[A-Z]", letter):
+		if letter == 'o' or letter == 'O':
+		    if letter in insertions:
+			print "You already guessed that letter.\n"
+		        raw_input()
 		    else:
-			print "Incorrect!"
+			print "Correct!"
+			correct += 1
+			insertions[0] = 'O'
+			removals[0] = '#'
+			raw_input()
+		elif letter == 'p' or letter == 'P':
+		    if letter in insertions:
+			print "You already guessed that letter.\n"
+		        raw_input()
+		    else:
+			print "Correct!"
+			correct += 1
+			insertions[1] = 'P'
+			removals[3] = '#'
+			raw_input()
+		elif letter == 'e' or letter == 'E':
+		    if letter in insertions:
+			print "You already guessed that letter.\n"
+		        raw_input()
+		    else:
+			print "Correct!"
+			correct += 1
+			insertions[2] = 'E'
+			removals[1] = '#'
+			raw_input()
+		elif letter == 'n' or letter == 'N':
+		    if letter in insertions:
+			print "You already guessed that letter.\n"
+		        raw_input()
+		    else:
+			print "Correct!"
+			correct += 1
+			insertions[3] = 'N'
+			removals[2] = '#'
+			raw_input()
+		else:
+		    print "Incorrect!"
+		    raw_input()
+
+	    else:
+		print "You must enter a letter.\n"
+
+	print """
+         ___       __       _^_    __
+          __  \ __/  \     / | | /    \  \__
+	++---\__  _/ \|----|  /---------\   _\     		   
+      \ \+------\ \--------|/------------| | \|                     _/ /
+       | |      //                      /  |        __   _  ___     /  \ 
+      / \ \  BEY%sND RESIDE THE ELDERS, //| \         -\_ \---------|/^\ |-
+     |  ||\|                             |\ |       | ===\|===  ===  ==\| |
+        ||    KEEPERS OF TH%s VILLAGE.    | ||       | / \  / \  / \  / \  |
+        ||    \                          |//        || %s || %s || %s || %s | |
+        ||     |  O%sLY THE WISE          ||         | \ /  \ /  \ /  \ /  |
+        ||     /\__                _/    ||         | ===  ===  ===  ===  |
+        ||   /      MAY %sASS.       \_ ___|          -------|\ /| --------
+       //_                           <   _\__               \__ /
+     _/ _ \/>-----_/-----|\------------\__/
+     _/ +\_/-------------| | /|----------++
+                          \  / 
+
+	""" % (removals[0], removals[1], insertions[0], insertions[1], insertions[2], insertions[3], removals[2], removals[3])
 
 signroom = SignRoom()
 signroom.interact()
