@@ -15,8 +15,6 @@ class StartRoom(Room):
         self.name = 'First Room'
 
     def interact(self):
-        global left_door_unlocked
-         
         print "\nThere is a door to your left and a door to your right."
 
         while True:
@@ -28,27 +26,28 @@ class StartRoom(Room):
         Look around this room.
         ? """)
     
-            if "left" in next and not left_door_unlocked or \
-               "Left" in next and not left_door_unlocked:
-                print "\nThe left door is locked. You cannot open it."
-            elif "left" in next and left_door_unlocked or \
-                 "Left" in next and left_door_unlocked:
-                print "\nThe left door is unlocked!"
-                print "You open the door."
+            if "left" in next and not functions.inventory.in_stock('talisman') or \
+               "Left" in next and not functions.inventory.in_stock('talisman'):
+                print "\nThe left door is locked. There is a hexagonal opening where something can fit."
+            elif "left" in next and functions.inventory.in_stock('talisman') or \
+                 "Left" in next and functions.inventory.in_stock('talisman'):
+                print "\nThere is a hexagonal opening in the door. You place the talisman into it."
+		functions.ellipsis()
+                print "You hear a loud click as the door unlocks. You open the door..."
 		return('fairy room')
             elif "right" in next or "Right" in next:
                 print "\nYou open the right door."
 		return('black room')
-            elif "around" in next and not functions.inventory.in_list('fairy key') or \
-                 "look" in next and not functions.inventory.in_list('fairy key') or \
-                 "Look" in next and not functions.inventory.in_list('fairy key'):
+            elif "around" in next and not functions.inventory.in_stock('fairy key') or \
+                 "look" in next and not functions.inventory.in_stock('fairy key') or \
+                 "Look" in next and not functions.inventory.in_stock('fairy key'):
                 print "\nYou search the room."
                 functions.ellipsis()
                 print "You find a small emerald key in a dark corner."
                 functions.inventory.add_item('fairy key') 
-            elif "around" in next and functions.inventory.in_list('fairy key') or \
-                 "look" in next and functions.inventory.in_list('fairy key') or \
-                 "Look" in next and functions.inventory.in_list('fairy key'):
+            elif "around" in next and functions.inventory.in_stock('fairy key') or \
+                 "look" in next and functions.inventory.in_stock('fairy key') or \
+                 "Look" in next and functions.inventory.in_stock('fairy key'):
                 print "\nYou find nothing more in the room."
             else:
                 print "\nI don't know what you mean. Choose one of the available options."
@@ -78,6 +77,7 @@ class BlackRoom(Room):
                 print "Your ankle gets caught on a rope on the ground."
 		print "You are caught in trap!"
                 self.trap_sprung = True
+		raw_input()
 		boss1 = bosses.Mastermind1()
 		boss1.interact()
 
@@ -311,9 +311,9 @@ class FairyRoom(Room):
         key in the course of your travels?\" 
         y/n """)
                 
-                    if next2 == "y" and functions.inventory.in_list('fairy key'):
+                    if next2 == "y" and functions.inventory.in_stock('fairy key'):
                         return(self.show_key())
-                    elif next2 == "y" and not :
+                    elif next2 == "y" and not functions.inventory.in_stock('fairy key'):
                         print """
         \"Nay! O' traveller! It seems a key you hold not. 
         Just the clothes on your back and the scars
@@ -362,7 +362,6 @@ class FairyRoom(Room):
                 print "Type \"y\" or \"n\"."
                             
     def second_fairy(self):
-        global fairy_key_found
         print """
         You pass through the door into the home of the fairies.
         The fairy you met earlier is waiting for you at the
@@ -407,9 +406,9 @@ class FairyRoom(Room):
         """
         while True:
             next = raw_input("\"Do you have the small emerald key?\" y/n ")
-            if next == "y" and fairy_key_found:
+            if next == "y" and functions.inventory.in_stock('fairy key'):
                 return(self.show_key())
-            elif next == "y" and not fairy_key_found:
+            elif next == "y" and not functions.inventory.in_stock('fairy key'):
                 print """
         \"Nay! O' traveller! It seems a key you hold not. 
         Just the clothes on your back and the scars
@@ -680,7 +679,7 @@ class FairyGarden(Room):
         looks quite tasty!
                                   """
                             while True:
-                                next = raw_input("\"Would you mind letting me have a slice?\" y/n ")
+                                next = raw_input("\"Can I have a slice?\" y/n ")
                                 if "y" in next or "Y" in next:
                                     print "You hand him a slice of cake."
                                     self.fairy_has_cake = True
@@ -763,8 +762,6 @@ class FairyGarden(Room):
             exit(0)
             
 			
-# -------------------------------- BOSSES --------------------------------- BOSSES -------------------------------------------
-        
 # ------------------------------ GAME ENGINE ---------------------------------------------GAME ENGINE -------------------------               
 class Engine(object):
 
@@ -816,8 +813,7 @@ class Map(object):
 	return Map.rooms.get(room_name)
 
 def reset_game():
-    global your_name, left_door_unlocked
-    left_door_unlocked = False
+    global your_name
     your_name = ''
 
 def main():

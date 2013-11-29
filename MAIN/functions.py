@@ -3,21 +3,21 @@ import sys
 
 
 class Inventory(object):
-    list = []
+    stock = []
 
     def __init__(self):
 	pass
 
     def add_item(self, item):
-	Inventory.list.append(item)
+	Inventory.stock.append(item)
 	print "%s added to inventory." % item
 
-    def in_list(self, item): 
-	if item in Inventory.list:
+    def in_stock(self, item): 
+	if item in Inventory.stock:
 	    return True
 
     def drop_item(self, item):
-	Inventory.list.remove(item)
+	Inventory.stock.remove(item)
 
 inventory = Inventory()
 

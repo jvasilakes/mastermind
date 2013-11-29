@@ -10,7 +10,6 @@ class Mastermind1(Boss):
         pass
         
     def interact(self):
-        global left_door_unlocked
         
         print """
         You hear the sudden click of a lock as the door through which you came
@@ -66,7 +65,6 @@ class Mastermind1(Boss):
             try:
                 ans_code = int(raw_input("Enter a 3-digit number: "))
                 if ans_code == 892:
-		    functions.inventory.add_item('talisman')
                     functions.ellipsis()
                     print "\n"
                     print """
@@ -76,11 +74,17 @@ class Mastermind1(Boss):
         The cloaked man and his horde of goblins are enveloped in a cloud 
         of blue smoke. The goblins' snickers slowly fade away and as the 
         smoke clears you find yourself alone in the room once again.
-        
-        You hear a loud click as the door is unlocked behind you.
-                """
+                	  """
+		    raw_input()
+
+		    print """
+	You pick up an odd-looking hexagonal talisman that the cloaked
+	man dropped. It looks important.
+			  """
+		    functions.inventory.add_item('talisman')
                     raw_input()
                     break
+
                 elif ans_code != 892:
                     if x == 2:
                         print "\"You've run out of guesses! Now you shall die!\""
