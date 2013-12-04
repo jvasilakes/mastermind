@@ -1,5 +1,6 @@
 import time
 import sys
+import re
 import functions
 import bosses
 
@@ -472,7 +473,7 @@ class FairyGarden(Room):
         ancient Sakura tree."
         """
         raw_input()
-        self.interact_2()
+        return(self.interact_2())
 
     def interact_2(self):
         print "You are in the fairy garden."
@@ -758,3 +759,232 @@ class FairyGarden(Room):
         else:
             print "FATAL ERROR!"
             exit(0)
+
+
+class SignRoom(Room):
+    def __init__(self):
+	pass
+
+    def entrance(self):
+	print """
+	You enter a small room whose walls are
+	covered in ivy and tree roots.
+	      """
+	raw_input()
+	return(self.plaque())
+
+    def plaque(self):
+	print """
+	There is a large stone plaque on the wall.
+	      """
+	raw_input()
+
+	print """
+
+         ___       __       _^_    __
+          __  \ __/  \     / | | /    \  \__
+	++---\__  _/ \|----|  /---------\   _\ 
+      \ \+------\ \--------|/------------| | \|
+       | |      //                      /  | 
+      / \ \  BEYOND RESIDE THE ELDERS, //| \ 
+     |  ||\|                             |\ |
+        ||    KEEPERS OF THE VILLAGE.    | ||
+        ||    \                          |//
+        ||     |  ONLY THE WISE          ||
+        ||     /\__                _/    ||
+        ||   /      MAY PASS.       \_ ___|
+       //_                           <   _\__
+     _/ _ \/>-----_/-----|\------------\__/
+     _/ +\_/-------------| | /|----------++
+                          \  / 
+
+              """
+	while True:
+	    next = raw_input(
+	   """
+	What do you do?
+	---------------
+	Return to the previous room.
+	Examine the stone plaque.
+	Search this room.
+	?  """)
+
+	    if "return" in next or "Return" in next or "previous" in next or "Previous" in next:
+	        return('fairy garden')
+	    elif "examine" in next or "Examine" in next or "plaque" in next or "Plaque" in next:
+	        return(self.examine())
+	    elif "search" in next or "Search" in next or "this" in next or "This" in next:
+	        self.search()
+	    else:
+	        print "\nI don't know what you mean. Choose one of the available options."	
+
+    def examine(self):
+	print "\nYou examine the stone plaque."
+	functions.ellipsis()
+	print """
+	It seems that each letter on the stone 
+	plaque is cut loose and can be taken out.
+	      """
+	raw_input()
+	print """
+	You brush away the leaves around the plaque
+	and find four small slots in the wall.
+	      """
+	functions.ellipsis()
+	
+	print """       
+		        ./ /
+	__   _  ___     /  \ 
+	 -\_ \---------|/^\ |-
+	| ===\|===  ===  ==\| |
+	| / \  / \  / \  / \  |
+        ||   ||   ||   ||   | |
+	| \ /  \ /  \ /  \ /  |
+	| ===  ===  ===  ===  |
+	 -------|\ /| --------
+                \__ /
+               """    
+	
+	ans = ''
+	while ans != 'n' and ans != 'N':
+            print "Try to guess the code? y/n "
+	    ans = raw_input()
+	    if ans == 'y' or ans == 'Y':
+		return(self.wheel_of_fortune())
+	    elif ans == 'n' or ans == 'N':
+		return(self.plaque())
+	    else:
+		print "You must enter either 'y' or 'n'."
+	
+
+
+    def search(self):
+	print "\nYou search the room."
+	functions.ellipsis()
+	print "\nYou find a roll of parchment hidden amongst the foliage.\n"
+	print "It reads...\n"
+	functions.ellipsis()
+	print """
+	   -----------------.
+	-|'________________\ |
+	   |               |
+           |               |
+           |  Bid it open  |
+	   | and you shall |
+	   |	 pass      |
+	  |'	          /
+	-|-------------- |`-
+	 \---------------\/
+	
+	      """	
+	raw_input()
+
+
+    def wheel_of_fortune(self):
+	insertions = [' ', ' ', ' ', ' ']
+	removals = ['O', 'E', 'N', 'P']
+	correct = 0
+	print "\nType \"stop\" at any time to quit guessing."
+	while correct < 4:
+	    print """
+	
+         ___       __       _^_    __
+          __  \ __/  \     / | | /    \  \__
+	++---\__  _/ \|----|  /---------\   _\     		   
+      \ \+------\ \--------|/------------| | \|                     _/ /
+       | |      //                      /  |        __   _  ___     /  \ 
+      / \ \  BEY%sND RESIDE THE ELDERS, //| \         -\_ \---------|/^\ |-
+     |  ||\|                             |\ |       | ===\|===  ===  ==\| |
+        ||    KEEPERS OF TH%s VILLAGE.    | ||       | / \  / \  / \  / \  |
+        ||    \                          |//        || %s || %s || %s || %s | |
+        ||     |  O%sLY THE WISE          ||         | \ /  \ /  \ /  \ /  |
+        ||     /\__                _/    ||         | ===  ===  ===  ===  |
+        ||   /      MAY %sASS.       \_ ___|          -------|\ /| --------
+       //_                           <   _\__               \__ /
+     _/ _ \/>-----_/-----|\------------\__/
+     _/ +\_/-------------| | /|----------++
+                          \  / 
+		   """ % (removals[0], removals[1], insertions[0], insertions[1], insertions[2], insertions[3], removals[2], removals[3])
+
+	    letter = raw_input("Which letter will you choose from the stone plaque? ")
+	    if letter == 'stop':
+		print "You stop guessing."
+		return(self.plaque())
+	    elif re.search(r"[A-Z]", letter):
+		if letter == 'o' or letter == 'O':
+		    if letter in insertions:
+			print "You already tried that letter.\n"
+		        raw_input()
+		    else:
+			print "It fits!"
+			correct += 1
+			insertions[0] = 'O'
+			removals[0] = '#'
+			raw_input()
+		elif letter == 'p' or letter == 'P':
+		    if letter in insertions:
+			print "You already tried that letter.\n"
+		        raw_input()
+		    else:
+			print "It fits!"
+			correct += 1
+			insertions[1] = 'P'
+			removals[3] = '#'
+			raw_input()
+		elif letter == 'e' or letter == 'E':
+		    if letter in insertions:
+			print "You already tried that letter.\n"
+		        raw_input()
+		    else:
+			print "It fits!"
+			correct += 1
+			insertions[2] = 'E'
+			removals[1] = '#'
+			raw_input()
+		elif letter == 'n' or letter == 'N':
+		    if letter in insertions:
+			print "You already tried that letter.\n"
+		        raw_input()
+		    else:
+			print "It fits!"
+			correct += 1
+			insertions[3] = 'N'
+			removals[2] = '#'
+			raw_input()
+		else:
+		    print "It doesn't seem to fit..."
+		    raw_input()
+
+	    else:
+		print "You must enter a letter.\n"
+
+	print """
+         ___       __       _^_    __
+          __  \ __/  \     / | | /    \  \__
+	++---\__  _/ \|----|  /---------\   _\     		   
+      \ \+------\ \--------|/------------| | \|                     _/ /
+       | |      //                      /  |        __   _  ___     /  \ 
+      / \ \  BEY%sND RESIDE THE ELDERS, //| \         -\_ \---------|/^\ |-
+     |  ||\|                             |\ |       | ===\|===  ===  ==\| |
+        ||    KEEPERS OF TH%s VILLAGE.    | ||       | / \  / \  / \  / \  |
+        ||    \                          |//        || %s || %s || %s || %s | |
+        ||     |  O%sLY THE WISE          ||         | \ /  \ /  \ /  \ /  |
+        ||     /\__                _/    ||         | ===  ===  ===  ===  |
+        ||   /      MAY %sASS.       \_ ___|          -------|\ /| --------
+       //_                           <   _\__               \__ /
+     _/ _ \/>-----_/-----|\------------\__/
+     _/ +\_/-------------| | /|----------++
+                          \  / 
+		   """ % (removals[0], removals[1], insertions[0], insertions[1], insertions[2], insertions[3], removals[2], removals[3])
+
+	functions.ellipsis()
+	print """
+	The room begins to shake. Dust that has clung to the stones and vines
+	since time out of mind is thrown loose and soon the entire room is opaque
+	with dust. 
+	     """
+	return('sakura tree')
+
+    def interact(self):
+	return self.entrance()
+

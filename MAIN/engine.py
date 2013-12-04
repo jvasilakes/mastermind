@@ -46,6 +46,7 @@ class Map(object):
     'black room' : rooms.BlackRoom(),
     'fairy room' : rooms.FairyRoom(),
     'fairy garden' : rooms.FairyGarden(),
+    'sign room' : rooms.SignRoom(),
     'boss1': bosses.Mastermind1() 
     }
 

@@ -50,9 +50,9 @@ class SignRoom(object):
 	    if "return" in next or "Return" in next or "previous" in next or "Previous" in next:
 	        return('fairy garden')
 	    elif "examine" in next or "Examine" in next or "plaque" in next or "Plaque" in next:
-	        return(self.examine())
+	        self.examine()
 	    elif "search" in next or "Search" in next or "this" in next or "This" in next:
-	        print "self.search()"
+	        self.search()
 	    else:
 	        print "\nI don't know what you mean. Choose one of the available options."	
 
@@ -85,6 +85,27 @@ class SignRoom(object):
                 \__ /
                """    
 	self.wheel_of_fortune()
+
+    def search(self):
+	print "\nYou search the room."
+	raw_input() # ellipsis()
+	print "\nYou find a roll of parchment hidden amongst the foliage.\n"
+	print "It reads...\n"
+	raw_input() # ellipsis()
+	print """
+	   -----------------.
+	-|'________________\ |
+	   |               |
+           |               |
+           |  Bid it open  |
+	   | and you shall |
+	   |	 pass      |
+	  |'	          /
+	-|-------------- |`-
+	 \---------------\/
+	
+	      """	
+	raw_input()
 
 
     def wheel_of_fortune(self):
